@@ -1,39 +1,36 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
 
 import { Button } from "@/components/ui/button"
 
 export function CartSummary() {
-  const router = useRouter()
   const {
     formattedTotalPrice,
     totalPrice,
     cartDetails,
     cartCount,
     redirectToCheckout,
-    clearCart,
   } = useShoppingCart()
   const [isLoading, setLoading] = useState(false)
   const isDisabled = isLoading || cartCount! === 0
   const shippingAmount = cartCount! > 0 ? 500 : 0
   const totalAmount = totalPrice! + shippingAmount
 
-  const pause = (duration: number) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, duration)
-    })
-  }
-
   async function onCheckout() {
     setLoading(true)
-    await pause(3000)
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      body: JSON.stringify(cartDetails),
+    })
+    const data = await response.json()
+    const result = await redirectToCheckout(data.id)
+    if (result.error) {
+      console.error(result)
+    }
     setLoading(false)
-    router.replace("/success")
-    clearCart()
   }
 
   return (

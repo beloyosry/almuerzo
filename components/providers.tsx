@@ -12,7 +12,12 @@ interface Props {
 
 export function Providers({ children }: Props) {
   return (
-    <CartProvider currency="USD" shouldPersist cartMode="checkout-session">
+    <CartProvider
+      currency="USD"
+      shouldPersist
+      cartMode="checkout-session"
+      stripe="pk_test_51OQy51FKQL88RS06W15yKnW6XZiuF7mVvBsPCv298tN0wEvQSjtSbJTjmiJWpsXigkGkzVNkSNrnszZMzKw3uiU000QP7Wqz1N"
+    >
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Toaster />
         {children}
