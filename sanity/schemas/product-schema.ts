@@ -28,11 +28,11 @@ export const product = defineType({
       name: "categories",
       title: "Categories",
       type: "array",
-      of: [{ type: "string" }],
+      of: [{ type: "reference", to: [{ type: "categories" }] }],
     },
     {
       name: "sizes",
-      title: "Sizes",
+      title: "Weights",
       type: "array",
       of: [{ type: "string" }],
     },

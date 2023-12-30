@@ -5,7 +5,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
 
-import { SanityProduct } from "@/config/inventory"
+import { ProductData, SanityProduct } from "@/config/inventory"
 import { getSizeName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
@@ -19,27 +19,39 @@ export function ProductInfo({ product }: Props) {
   const { addItem, incrementItem, cartDetails } = useShoppingCart()
   const { toast } = useToast()
   const isInCart = !!cartDetails?.[product.id]
+
+    const weights = [1 / 4, 1 / 3, 1 / 2, 1]
+  const weight: number | undefined = weights.find(
+    (w) => w === eval(selectedSize)
+  )
+  const weightPrice = weight ? weight * product.price * 100 : 0
+
+  const product_data: ProductData = {
+    size: selectedSize as string,
+    price: weightPrice as number,
+  }
+
   function addToCart() {
     const item = {
       ...product,
-      product_data: {
-        size: selectedSize,
-      },
+      product_data
     }
     isInCart ? incrementItem(item._id) : addItem(item)
     toast({
-      title: `${item.name} (${getSizeName(selectedSize)})`,
-      description: "Product Added to cart",
+      title: `${item.name} (${getSizeName(selectedSize)} كيلو)`,
+      description: "تمت الاضافة للسلة",
       action: (
         <Link href="/cart">
           <Button variant="link" className="gap-x-2 whitespace-nowrap">
-            <span>Open cart</span>
+            <span>إذهب للسلة</span>
             <ArrowRight className="h-5 w-5" />
           </Button>
         </Link>
       ),
     })
   }
+
+
 
   return (
     <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
@@ -49,7 +61,7 @@ export function ProductInfo({ product }: Props) {
         <h2 className="sr-only">Product information</h2>
         <p className="text-3xl tracking-tight">
           {formatCurrencyString({
-            value: product.price,
+            value: weightPrice,
             currency: product.currency,
           })}
         </p>
@@ -62,7 +74,7 @@ export function ProductInfo({ product }: Props) {
 
       <div className="mt-4">
         <p>
-          Size: <strong>{getSizeName(selectedSize)}</strong>
+          الوزن (ك): <strong>{getSizeName(selectedSize)}</strong>
         </p>
         {product.sizes.map((size) => (
           <Button
@@ -83,7 +95,7 @@ export function ProductInfo({ product }: Props) {
             type="button"
             className="w-full bg-violet-600 py-6 text-base font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500"
           >
-            Add to cart
+            أضف لعربة الشراء
           </Button>
         </div>
       </form>

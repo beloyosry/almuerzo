@@ -1,6 +1,11 @@
 import { Image } from "sanity"
 
-interface InventoryProduct {
+export interface ProductData {
+  size?: string
+  price?: number
+}
+
+export interface InventoryProduct {
   id: string
   name: string
   image: string
@@ -12,6 +17,7 @@ interface InventoryProduct {
   currency: string
   description: string
   sku: string
+  product_data?: ProductData
 }
 
 export interface SanityProduct extends Omit<InventoryProduct, "images"> {
@@ -19,6 +25,16 @@ export interface SanityProduct extends Omit<InventoryProduct, "images"> {
   _createdAt: Date
   slug: string
   images: Image[]
+}
+
+export interface Category {
+  _type: "categories"
+  _id: string
+  title: string
+  images: Image
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
 }
 
 export const inventory: InventoryProduct[] = [

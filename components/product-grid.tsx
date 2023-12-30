@@ -28,14 +28,14 @@ export function ProductGrid({ products }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3 lg:col-span-3 lg:gap-x-8">
+    <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-4 lg:col-span-3 lg:gap-x-8">
       {products.map((product) => (
         <Link
           key={product._id}
           href={`/products/${product.slug}`}
           className="group text-sm"
         >
-          <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-100 group-hover:opacity-75 dark:border-gray-800">
+          <div className="aspect-h-1 aspect-w-1 h-full max-h-[80%] w-full overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-100 group-hover:opacity-75 dark:border-gray-800">
             <Image
               placeholder="blur"
               blurDataURL={`data:image/svg+xml;base64,${toBase64(
@@ -52,7 +52,7 @@ export function ProductGrid({ products }: Props) {
           <p className="mt-2 font-medium">
             {formatCurrencyString({
               currency: product.currency,
-              value: product.price,
+              value: product.price * 100,
             })}
           </p>
         </Link>

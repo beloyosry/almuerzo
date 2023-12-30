@@ -19,10 +19,11 @@ export function SiteFooter() {
           ))}
         </nav>
         <Link
-          href="https://www.fullstack.so"
+          href="https://beloyosry.github.io/Belal-Portfolio/"
           className="mt-10 block text-center text-xs leading-5"
+          target={"_blank"}
         >
-          &copy; {new Date().getFullYear()} {siteConfig.name} LLC. All rights
+          &copy; {new Date().getFullYear()} By Belal Yosry LLC. All rights
           reserved.
         </Link>
       </div>

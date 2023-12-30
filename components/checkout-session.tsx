@@ -2,15 +2,16 @@
 
 import { useEffect } from "react"
 import { CheckCheck, XCircle } from "lucide-react"
-import Stripe from "stripe"
 import { useShoppingCart } from "use-shopping-cart"
 
-interface Props {
-  customerDetails: Stripe.Checkout.Session.CustomerDetails | null
-}
-
-export function CheckoutSession({ customerDetails }: Props) {
+export function CheckoutSession() {
   const { clearCart } = useShoppingCart()
+
+  const customerDetails = {
+    name: sessionStorage.getItem("name"),
+    address: sessionStorage.getItem("address"),
+    phonNumber: sessionStorage.getItem("phoneNumber"),
+  }
 
   useEffect(() => {
     if (customerDetails) {
@@ -18,12 +19,17 @@ export function CheckoutSession({ customerDetails }: Props) {
     }
   }, [customerDetails])
 
-  if (!customerDetails) {
+  if (
+    !customerDetails ||
+    !customerDetails.name ||
+    !customerDetails.address ||
+    !customerDetails.phonNumber
+  ) {
     return (
       <>
         <XCircle className="mx-auto h-10 w-10 text-red-400" />
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-red-400 sm:text-5xl">
-          No checkout session found
+          لا توجد جلسة دفع !
         </h1>
       </>
     )
@@ -33,18 +39,18 @@ export function CheckoutSession({ customerDetails }: Props) {
     <>
       <CheckCheck className="mx-auto h-10 w-10 text-lime-500 dark:text-lime-400" />
       <h1 className="mt-4 text-3xl font-bold tracking-tight text-lime-500 dark:text-lime-400 sm:text-5xl">
-        Order Successful!
+        تم الطلب بنجاح!
       </h1>
       <h3 className="mt-8 text-2xl leading-7">
-        Thank you,{" "}
-        <span className="font-extrabold">{customerDetails.name}</span>!
+        شكرا لك, <span className="font-extrabold">{customerDetails.name}</span>!
       </h3>
       <p className="mt-8">
-        Check your purchase email{" "}
+        سيتم التواصل معكم على الرقم{" "}
         <span className="mx-1 font-extrabold text-indigo-500">
-          {customerDetails.email}
+          {customerDetails.phonNumber}
         </span>{" "}
-        for your invoice.
+        ليتم تأكيد الطلب ومراجعة البيانات. <br />
+        سعداء بخدمتكم.
       </p>
     </>
   )

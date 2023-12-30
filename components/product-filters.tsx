@@ -17,13 +17,15 @@ import { Checkbox } from "@/components/ui/checkbox"
 const filters = [
   {
     id: "category",
-    name: "Category",
+    name: "الفئة",
     options: [
-      { value: "bags", label: "Bags" },
-      { value: "belts", label: "Belts" },
-      { value: "gloves", label: "Gloves" },
-      { value: "scarves", label: "Scarves" },
-      { value: "wallets", label: "Wallets" },
+      { value: "برجر", label: "برجر" },
+      { value: "كفتة", label: "كفتة" },
+      { value: "فرايد تشيكن", label: "فرايد تشيكن" },
+      { value: "نقانق", label: "نقانق" },
+      { value: "لانشون", label: "لانشون" },
+      { value: "تشيكن", label: "تشيكن" },
+      { value: "لحم", label: "لحم" },
     ],
   },
   {
@@ -57,7 +59,7 @@ export function ProductFilters() {
   const searchValues = Array.from(searchParams.entries())
   return (
     <form className="sticky top-20">
-      <h3 className="sr-only">Categories</h3>
+      <h3 className="sr-only">الفئات</h3>
 
       {filters.map((section, i) => (
         <Accordion key={i} type="single" collapsible>
@@ -97,7 +99,7 @@ export function ProductFilters() {
                     />
                     <label
                       htmlFor={`filter-${section.id}-${optionIdx}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="!mr-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {option.label}
                     </label>
