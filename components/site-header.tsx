@@ -9,13 +9,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { UseCart } from "./cart-provider"
 
 export function SiteHeader() {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { cartCount } = useShoppingCart()
+  const { cartItems } = UseCart();
   const defaultSearchQuery = searchParams.get("search") ?? ""
+
+  const cartCount = cartItems.length;
 
   if (pathname.startsWith("/studio")) return null
 

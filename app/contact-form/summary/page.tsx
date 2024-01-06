@@ -2,68 +2,31 @@
 
 import React, { useEffect, useState } from "react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import { urlForImage } from "@/sanity/lib/image"
-import { Loader2 } from "lucide-react"
-import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
-
+import { formatCurrencyString } from "use-shopping-cart"
 import { shimmer, toBase64 } from "@/lib/image"
 import { getSizeName } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ProductData, SanityProduct } from "@/config/inventory"
+import { UseCart } from "@/components/cart-provider"
+import { CartSummary } from "@/components/cart-summary"
 
 function Summary() {
-  const { cartDetails, cartCount, successUrl } = useShoppingCart()
-  const cartItems= Object.entries(cartDetails!).map(([_, product ]) => product)
+  const { cartItems } = UseCart()
   const [name, setName] = useState<string>("")
   const [address, setAddress] = useState<string>("")
   const [phonNumber, setPhoneNumber] = useState<string>("")
-  const router = useRouter()
-  const [isLoading, setLoading] = useState(false)
-  const isDisabled = isLoading || cartCount! === 0
-  const shippingValue = 50
-  const shippingAmount = cartCount! > 0 ? shippingValue : 0
 
   useEffect(() => {
-    if (cartDetails) {
+    if (cartItems) {
       setName(sessionStorage.getItem("name") || "")
       setAddress(sessionStorage.getItem("address") || "")
       setPhoneNumber(sessionStorage.getItem("phoneNumber") || "")
+
     }
   }, [])
 
-  if (!cartDetails) {
+  if (!cartItems || !name || !address || !phonNumber) {
     return
   }
-  // Calculate total price including weights
-  const totalWeightPrice = Object.values(cartDetails).reduce(
-    (total, product) => {
-      const productData: ProductData | undefined = product.product_data
-      const productPrice: ProductData["price"] | undefined =
-        productData && typeof productData === "object"
-          ? productData.price || 0
-          : 0
-
-      return total + productPrice * product.quantity
-    },
-    0
-  )
-
-  const totalAmount = totalWeightPrice + shippingAmount * 100
-
-  const pause = (duration: number) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, duration)
-    })
-  }
-
-  const onCheckout = async () => {
-    setLoading(true)
-    await pause(3000)
-    router.push(successUrl!)
-    setLoading(false)
-  }
-
   return (
     <div className="px-4 py-14 2xl:container md:px-6 2xl:mx-auto 2xl:px-20">
       <div className="jusitfy-center mt-10 flex w-full flex-col items-stretch  space-y-4 md:space-y-6 xl:flex-row xl:space-x-8 xl:space-y-0">
@@ -72,7 +35,7 @@ function Summary() {
             <p className="xl:leading-5s text-lg font-semibold leading-6  text-gray-800 dark:text-gray-200 md:text-xl">
               مراجعة الطلب
             </p>
-            {cartItems.map((product ) => (
+            {cartItems.map((product) => (
               <div
                 key={product.id}
                 className="mt-4 flex w-full flex-col items-start justify-start gap-5 md:mt-6 md:flex-row md:items-center md:space-x-6 xl:space-x-8 "
@@ -100,20 +63,34 @@ function Summary() {
                         <span className="text-gray-800 dark:text-gray-200">
                           الوزن:{" "}
                         </span>
-                        {getSizeName(product.product_data?.size )} ك
+                        {getSizeName(product.product_data?.size || "")} ك
                       </p>
                     </div>
                   </div>
+
                   <div className="flex w-full items-start justify-between space-x-8">
                     <p className="text-base leading-6 text-gray-800 dark:text-gray-200 xl:text-lg">
-                      {product.quantity}
+                      {product.product_data?.quantity}
                     </p>
                     <p className="text-base font-semibold leading-6 text-gray-800 dark:text-gray-200 xl:text-lg">
                       {formatCurrencyString({
-                        value : product.product_data?.price || 0,
+                        value: product.product_data?.price || 0,
                         currency: product.currency,
                       })}
                     </p>
+                  </div>
+                  <div>
+                    الإجمالي:{" "}
+                    {formatCurrencyString({
+                      value: (() => {
+                        const productData = product.product_data;
+                        const productPrice = productData?.price || 0;
+                        const productQuantity = productData?.quantity || 0;
+
+                        return productPrice * productQuantity;
+                      })(),
+                      currency: product.currency,
+                    })}
                   </div>
                 </div>
               </div>
@@ -136,7 +113,7 @@ function Summary() {
               <div className="flex flex-col items-center justify-center space-y-4 md:flex-row md:items-start md:justify-start md:space-x-6 md:space-y-0 lg:space-x-8 xl:flex-col  xl:space-x-0 xl:space-y-12 ">
                 <div className="flex flex-col items-center  justify-center space-y-4 md:items-start md:justify-start xl:mt-8">
                   <p className="text-center text-base font-semibold leading-4 text-gray-800 dark:text-gray-200 md:text-left">
-                    Shipping Address
+                    عنوان الشحن
                   </p>
                   <p className="w-48 text-right text-sm leading-5 text-gray-600 dark:text-gray-400 md:text-right lg:w-full xl:w-48">
                     {address}
@@ -144,7 +121,7 @@ function Summary() {
                 </div>
                 <div className="flex flex-col items-center  justify-center space-y-4 md:items-start md:justify-start xl:mt-8">
                   <p className="text-center text-base font-semibold leading-4 text-gray-800 dark:text-gray-200 md:text-left">
-                    Phone Number
+                    رقم الهاتف
                   </p>
                   <p className="w-48 text-right text-sm leading-5 text-gray-600 dark:text-gray-400 md:text-right lg:w-full xl:w-48">
                     {phonNumber}
@@ -153,58 +130,7 @@ function Summary() {
               </div>
 
               {/* Summary */}
-              <section
-                aria-labelledby="summary-heading"
-                className="!mt-9 rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-6 shadow-md dark:border-gray-900 dark:bg-black sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
-              >
-                <h2 id="summary-heading" className="text-lg font-medium">
-                  ملخص الطلب
-                </h2>
-
-                <dl className="mt-6 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <dt className="text-sm">المجموع الجزئي</dt>
-                    <dd className="text-sm font-medium">
-                      {formatCurrencyString({
-                        currency: "EGP",
-                        value: totalWeightPrice,
-                      })}
-                    </dd>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-600">
-                    <dt className="flex items-center text-sm">
-                      <span>مصاريف الشحن</span>
-                    </dt>
-                    <dd className="text-sm font-medium">
-                      {formatCurrencyString({
-                        currency: "EGP",
-                        value: shippingAmount * 100,
-                      })}
-                    </dd>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-600">
-                    <dt className="text-base font-medium">المجموع الكلي</dt>
-                    <dd className="text-base font-medium">
-                      {formatCurrencyString({
-                        currency: "EGP",
-                        value: totalAmount,
-                      })}
-                    </dd>
-                  </div>
-                </dl>
-                <div className="mt-6">
-                  <Button
-                    onClick={onCheckout}
-                    className="w-full"
-                    disabled={isDisabled}
-                  >
-                    {isLoading ? "جاري المعالجة..." : "تأكيد الطلب"}
-                    {isLoading && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                  </Button>
-                </div>
-              </section>
+              <CartSummary target="/success" home={true} checkout={true} />
             </div>
           </div>
         </div>

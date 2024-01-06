@@ -6,7 +6,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t">
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-20 lg:px-8">
-        <nav
+        {/* <nav
           className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
           aria-label="Footer"
         >
@@ -17,7 +17,7 @@ export function SiteFooter() {
               </Link>
             </div>
           ))}
-        </nav>
+        </nav> */}
         <Link
           href="https://beloyosry.github.io/Belal-Portfolio/"
           className="mt-10 block text-center text-xs leading-5"

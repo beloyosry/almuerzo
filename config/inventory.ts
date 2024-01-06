@@ -1,8 +1,10 @@
+// config/inventory.ts
 import { Image } from "sanity"
 
 export interface ProductData {
   size?: string
   price?: number
+  quantity?: number
 }
 
 export interface InventoryProduct {
@@ -17,7 +19,7 @@ export interface InventoryProduct {
   currency: string
   description: string
   sku: string
-  product_data?: ProductData
+  product_data?: ProductData 
 }
 
 export interface SanityProduct extends Omit<InventoryProduct, "images"> {
@@ -35,6 +37,38 @@ export interface Category {
   _createdAt: string
   _updatedAt: string
   _rev: string
+}
+
+export interface User {
+ readonly _id: string
+ readonly name: string;
+ readonly address: string;
+ readonly phone: string;
+}
+
+export interface OrderItem {
+  readonly _key: string;
+  readonly _id: string;
+  readonly name: string;
+  readonly price: number;
+  readonly quantity: number;
+  readonly weight: string;
+}
+
+export interface Order{
+  readonly _id: string;
+  readonly _createdAt: string;
+  readonly _updatedAt: string;
+  readonly items: readonly OrderItem[];
+  readonly user: User;
+  readonly readOnly: boolean;
+}
+
+export interface Locations {
+  _id: string
+  location: string
+  slug: string
+  shippingPrice: number
 }
 
 export const inventory: InventoryProduct[] = [

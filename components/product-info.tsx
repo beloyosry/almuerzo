@@ -3,40 +3,47 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
+import { formatCurrencyString } from "use-shopping-cart"
 
-import { ProductData, SanityProduct } from "@/config/inventory"
+import { SanityProduct } from "@/config/inventory"
 import { getSizeName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
+import { UseCart } from "./cart-provider"
+
 
 interface Props {
   product: SanityProduct
 }
 
 export function ProductInfo({ product }: Props) {
+  const { addItemToCart, updateQuantity } = UseCart();
   const [selectedSize, setSelectedSize] = useState(product.sizes[0])
-  const { addItem, incrementItem, cartDetails } = useShoppingCart()
   const { toast } = useToast()
-  const isInCart = !!cartDetails?.[product.id]
 
-    const weights = [1 / 4, 1 / 3, 1 / 2, 1]
+  const weights = [1 / 4, 1 / 3, 1 / 2, 1]
   const weight: number | undefined = weights.find(
     (w) => w === eval(selectedSize)
   )
   const weightPrice = weight ? weight * product.price * 100 : 0
 
-  const product_data: ProductData = {
+  const product_data = {
     size: selectedSize as string,
     price: weightPrice as number,
+    quantity: 1 as number
   }
+
+  const isInCart = !!product_data?.size || !!product._id
 
   function addToCart() {
     const item = {
       ...product,
       product_data
     }
-    isInCart ? incrementItem(item._id) : addItem(item)
+
+    // isInCart ? updateQuantity(item._id, item.product_data.quantity) : addItemToCart(item);
+    addItemToCart(item)
+
     toast({
       title: `${item.name} (${getSizeName(selectedSize)} كيلو)`,
       description: "تمت الاضافة للسلة",

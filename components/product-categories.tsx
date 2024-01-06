@@ -54,7 +54,7 @@ const ProductCategories = () => {
   }
 
   return (
-    <div className="mx-auto mt-20 flex w-full flex-wrap items-center justify-center gap-6 text-center md:w-1/2 md:gap-10">
+    <div className="mx-auto mt-20 flex w-full flex-wrap  justify-center gap-6 text-center md:w-1/2 md:gap-10">
       {categories.map((category, index) => (
         <div key={index}>
           <img
@@ -67,7 +67,7 @@ const ProductCategories = () => {
                 : " brightness-[60%]"
             } object-cover object-center transition-all duration-500 ease-in-out hover:scale-125 hover:brightness-100 dark:border-gray-800 md:h-[100px] md:w-[100px]`}
           />
-          <p className="mt-3">{category.title}</p>
+          <p className="mt-3 max-w-min md:max-w-none">{category.title}</p>
         </div>
       ))}
       <div>

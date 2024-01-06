@@ -2,10 +2,10 @@
 
 import { useEffect } from "react"
 import { CheckCheck, XCircle } from "lucide-react"
-import { useShoppingCart } from "use-shopping-cart"
+import { UseCart } from "./cart-provider"
 
 export function CheckoutSession() {
-  const { clearCart } = useShoppingCart()
+  const { clearCart } = UseCart()
 
   const customerDetails = {
     name: sessionStorage.getItem("name"),

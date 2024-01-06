@@ -1,3 +1,5 @@
+// categories-schema.ts
+
 import { defineField, defineType } from "sanity"
 
 export const categories = defineType({
@@ -16,7 +18,7 @@ export const categories = defineType({
       type: "image",
       options: {
         hotspot: true,
-      }
+      },
     },
   ],
 })

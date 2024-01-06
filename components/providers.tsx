@@ -13,7 +13,6 @@ interface Props {
 export function Providers({ children }: Props) {
   return (
     <CartProvider
-      successUrl="http://localhost:3000/success"
       currency="EGP"
       shouldPersist
       cartMode="checkout-session"

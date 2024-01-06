@@ -71,8 +71,7 @@ export default async function Page({ searchParams }: Props) {
             <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
               {products.length} منتجات
             </h1>
-            {/* Product Sort */}
-            <ProductSort />
+          
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6 ">

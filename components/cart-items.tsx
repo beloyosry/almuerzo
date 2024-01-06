@@ -4,23 +4,23 @@ import Image from "next/image"
 import Link from "next/link"
 import { urlForImage } from "@/sanity/lib/image"
 import { Clock, X } from "lucide-react"
-import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
-import { Product } from "use-shopping-cart/core"
-
+import { formatCurrencyString } from "use-shopping-cart"
 import { shimmer, toBase64 } from "@/lib/image"
 import { getSizeName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { CartItemsEmpty } from "@/components/cart-items-empty"
+import { SanityProduct } from "@/config/inventory"
+import { UseCart } from "@/components/cart-provider"
 
 export function CartItems() {
-  const { cartDetails, removeItem, setItemQuantity } = useShoppingCart()
-  const cartItems = Object.entries(cartDetails!).map(([_, product]) => product)
+  const { removeFromCart, updateQuantity, cartItems } = UseCart()
   const { toast } = useToast()
 
-  function removeCartItem(product: Product) {
-    removeItem(product._id)
+  function removeCartItem(product: SanityProduct) {
+    removeFromCart(product);
+
     toast({
       title: `${product.name} تم الحذف`,
       description: "تم الحذف من السلة",
@@ -30,13 +30,14 @@ export function CartItems() {
 
   if (cartItems.length === 0) return <CartItemsEmpty />
 
+
   return (
     <ul
       role="list"
       className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-500 dark:border-gray-500"
     >
-      {cartItems.map((product, productIdx) => (
-        <li key={product._id} className="flex py-6 sm:py-10">
+      {cartItems.map((product: SanityProduct, productIdx: number) => (
+        <li key={productIdx} className="flex py-6 sm:py-10">
           <div className="shrink-0">
             <Image
               src={urlForImage(product.images[0]).url()}
@@ -52,7 +53,7 @@ export function CartItems() {
           </div>
 
           <div className="mr-4 flex flex-1 flex-col justify-between sm:mr-6">
-            <div className="relative justify-between pl-9 sm:flex sm:gap-x-6 sm:pl-0">
+            <div className="relative justify-between border-b border-b-gray-400 pb-3 pl-9 sm:flex sm:gap-x-6 sm:pl-0">
               <div>
                 <div className="flex justify-between">
                   <h3 className="text-sm">
@@ -87,9 +88,10 @@ export function CartItems() {
                   className="w-16"
                   min={1}
                   max={10}
-                  value={product.quantity}
+                  value={product.product_data?.quantity}
                   onChange={(event) => {
-                    setItemQuantity(product._id, Number(event.target.value))
+                    const newQuantity = Number(event.target.value);
+                    updateQuantity(product._id, product.product_data?.size || "", newQuantity);
                   }}
                 />
                 <div className="absolute left-0 top-0">
@@ -105,11 +107,19 @@ export function CartItems() {
                 </div>
               </div>
             </div>
+            <div>
+              الإجمالي:{" "}
+              {formatCurrencyString({
+                value: (() => {
+                  const productData = product.product_data;
+                  const productPrice = productData?.price || 0;
+                  const productQuantity = productData?.quantity || 0;
 
-            <p className="mt-4 flex space-x-2 text-sm">
-              <Clock className="ml-2 h-5 w-5 shrink-0" aria-hidden="true" />
-              <span>Ships in 1 week</span>
-            </p>
+                  return productPrice * productQuantity;
+                })(),
+                currency: product.currency,
+              })}
+            </div>
           </div>
         </li>
       ))}
