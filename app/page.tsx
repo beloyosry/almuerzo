@@ -1,57 +1,64 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
 import { client } from "@/sanity/lib/client"
 import { groq } from "next-sanity"
-
 import { SanityProduct } from "@/config/inventory"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import ProductCategories from "@/components/product-categories"
 import { ProductGrid } from "@/components/product-grid"
-import { ProductSort } from "@/components/product-sort"
 
 interface Props {
   searchParams: {
-    date?: string
-    price?: string
-    color?: string
     category?: string
-    size?: number
     search?: string
   }
 }
 
-export default async function Page({ searchParams }: Props) {
-  const { date = "desc", price, color, category, size, search } = searchParams
+export default function Page({ searchParams }: Props) {
+  const [products, setProducts] = useState<SanityProduct[]>([])
 
-  const priceOrder = price ? `| order(price ${price})` : ""
-  const dateOrder = date ? `| order(_createdAt ${date})` : ""
-  const order = `${priceOrder}${dateOrder}`
+  const { category, search } = searchParams
 
-  const productFilter = `_type == "product"`
-  const colorFilter = color ? `&& "${color}" in colors` : ""
-  const categoryFilter = category
-    ? `&& categories[]->title match "${category}"`
-    : ""
-  const sizeFilter = size ? `&& "${size}" in sizes` : ""
-  const searchFilter = search ? `&& name match "${search}"` : ""
-  const filter = `*[${productFilter}${colorFilter}${categoryFilter}${sizeFilter}${searchFilter}]`
+  useEffect(() => {
+    const fetchData = async () => {
+      const productFilter = `_type == "product"`
+      const categoryFilter = category
+        ? `&& categories[]->title match "${category}"`
+        : ""
+      const searchFilter = search ? `&& name match "${search}"` : ""
+      const filter = `*[${productFilter}${categoryFilter}${searchFilter}]`
 
-  const products = await client.fetch<SanityProduct[]>(
-    groq`${filter} ${order}{
-      _id,
-      _createdAt,
-      name,
-      sku,
-      images,
-      currency,
-      categories[]->{
-        _id,
-        title,
-      },
-      price,
-      description,
-      "slug": slug.current
-    }`
-  )
+      try {
+        const result = await client.fetch<SanityProduct[]>(
+          groq`${filter} {
+            _id,
+            _createdAt,
+            name,
+            sku,
+            images,
+            currency,
+            categories[]->{
+              _id,
+              title,
+            },
+            price,
+            description,
+            "slug": slug.current
+          }`
+        );
+
+        setProducts(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [category, search]);
+
+
 
   return (
     <div>
@@ -71,7 +78,7 @@ export default async function Page({ searchParams }: Props) {
             <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
               {products.length} منتجات
             </h1>
-          
+
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6 ">

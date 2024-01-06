@@ -1,21 +1,11 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { client } from "@/sanity/lib/client"
 import { urlForImage } from "@/sanity/lib/image"
 import { groq } from "next-sanity"
-
 import { Category } from "@/config/inventory"
-import { shimmer, toBase64 } from "@/lib/image"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Checkbox } from "@/components/ui/checkbox"
 
 const ProductCategories = () => {
   const pathName = usePathname()
