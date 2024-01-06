@@ -36,7 +36,6 @@ export default function Page({ searchParams }: Props) {
             _id,
             _createdAt,
             name,
-            sku,
             images,
             currency,
             categories[]->{

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { UseCart } from "./cart-provider"
 import Link from "next/link"
 import { product } from "@/sanity/schemas/product-schema"
-import { Locations, Order, OrderItem, SanityProduct, User } from "@/config/inventory"
+import { Locations, OrderItem, User } from "@/config/inventory"
 import { client } from "@/sanity/lib/client"
 import { groq } from "next-sanity"
 
@@ -18,6 +18,8 @@ interface Props {
   home?: boolean
   checkout?: boolean
 }
+
+
 
 export function CartSummary({ target, home, checkout = false }: Props) {
   const { cartItems } = UseCart()
@@ -50,7 +52,13 @@ export function CartSummary({ target, home, checkout = false }: Props) {
     name: sessionStorage.getItem("name") || "",
     address: sessionStorage.getItem("address") || "",
     phone: sessionStorage.getItem("phoneNumber") || "",
+    shippingStatus: isShipping ? "توصيل" : "الإستلام من المنزل",
+    location: selectedLocationObject &&
+    selectedLocationObject.location || "لا يوجد توصيل",
+    shippingPrice: selectedLocationObject?.shippingPrice || 0,
+
   }
+
 
 
   if (!cartItems) {
@@ -91,7 +99,7 @@ export function CartSummary({ target, home, checkout = false }: Props) {
             name: item.name,  // Assuming each cart item has a 'name' property
             price: (Number(item.product_data?.price) / 100) * (Number(item.product_data?.quantity)) || 0,  // Adjust as per your data structure
             quantity: item.product_data?.quantity || 0,
-            weight: String(item.product_data?.size) || "",
+            weight: String(item.product_data?.weight) || "",
           })) as OrderItem[],
           user: user as User,
           totalPrice: String(totalAmount / 100) + " EGP",

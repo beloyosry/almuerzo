@@ -22,14 +22,39 @@ export const orders = defineType({
         {
           type: "object",
           fields: [
-            { name: "name", type: "string", title: "Product Name" },
-            { name: "price", type: "number", title: "Product Price" },
-            { name: "quantity", type: "number", title: "Quantity" },
+            {
+              name: "name",
+              type: "string",
+              title: "Product Name",
+            },
+            {
+              name: "price",
+              type: "number",
+              title: "Product Price",
+            },
+            {
+              name: "quantity",
+              type: "number",
+              title: "Quantity",
+            },
             { name: "weight", type: "string", title: "Weight" },
           ],
-          readOnly: true,
+          preview: {
+            select: {
+              name: "name",
+              price: "price",
+              quantity: "quantity",
+              weight: "weight",
+            },
+            prepare: ({ name, price, quantity, weight }) => ({
+              title: `Item: ${name} - Price: ${price}, Quantity: ${quantity}, Weight: ${weight}`,
+            }),
+          },
         },
       ],
+      options: {
+        layout: "table",
+      },
       readOnly: true,
     },
     {
@@ -40,6 +65,9 @@ export const orders = defineType({
         { name: "name", type: "string", title: "User Name" },
         { name: "address", type: "string", title: "User Address" },
         { name: "phone", type: "string", title: "Phone Number" },
+        { name: "shippingStatus", type: "string", title: "Shipping Status" },
+        { name: "location", type: "string", title: "Location" },
+        { name: "shippingPrice", type: "number", title: "Shipping Price" },
       ],
       readOnly: true,
     },

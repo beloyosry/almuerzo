@@ -18,14 +18,12 @@ export default async function Page({ params }: Props) {
       _createdAt,
       "id":_id,
       name,
-      sku,
       images,
       price,
       currency,
       description,
-      sizes,
+      weights,
       categories,
-      colors,
       "slug":slug.current
     }`
   )

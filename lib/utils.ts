@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getSizeName(value: string) {
+export function getWeightName(value: string) {
   switch (value) {
     case "1/4":
       return "1/4"
@@ -15,9 +15,5 @@ export function getSizeName(value: string) {
       return "1/3"
     case "1":
       return "1"
-    // case "xl":
-    //   return "X-Large"
-    // case "one-size":
-    //   return "One Size"
   }
 }

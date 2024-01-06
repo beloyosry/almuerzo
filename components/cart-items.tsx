@@ -6,7 +6,7 @@ import { urlForImage } from "@/sanity/lib/image"
 import { Clock, X } from "lucide-react"
 import { formatCurrencyString } from "use-shopping-cart"
 import { shimmer, toBase64 } from "@/lib/image"
-import { getSizeName } from "@/lib/utils"
+import { getWeightName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
@@ -73,7 +73,7 @@ export function CartItems() {
                 </p>
                 <p className="mt-1 text-sm font-medium">
                   الوزن (ك): {/* @ts-ignore */}
-                  <strong>{getSizeName(product.product_data?.size)}</strong>
+                  <strong>{getWeightName(product.product_data?.weight)}</strong>
                 </p>
               </div>
 
@@ -91,7 +91,7 @@ export function CartItems() {
                   value={product.product_data?.quantity}
                   onChange={(event) => {
                     const newQuantity = Number(event.target.value);
-                    updateQuantity(product._id, product.product_data?.size || "", newQuantity);
+                    updateQuantity(product._id, product.product_data?.weight || "", newQuantity);
                   }}
                 />
                 <div className="absolute left-0 top-0">

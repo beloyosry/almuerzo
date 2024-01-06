@@ -5,7 +5,7 @@ import { createContext, useContext, ReactNode, useEffect, useState } from 'react
 import { SanityProduct } from '@/config/inventory';
 
 interface CartContextProps {
-  /** 
+  /**
   *This is containing the cart items as an array of SanityProduct objects.
   * @type {SanityProduct[]}
   * @default []
@@ -33,10 +33,10 @@ interface CartContextProps {
   /**
    * This function is used to update the quantity of an item in the cart.
    * @param productId - The ID of the product to update.
-   * @param size - The size of the product to update.
+   * @param weight - The weight of the product to update.
    * @param newQuantity - The new quantity of the product.
    */
-  updateQuantity: (productId: string, size: string, newQuantity: number) => void;
+  updateQuantity: (productId: string, weight: string, newQuantity: number) => void;
 
   /**
    * This function is used to clear the cart.
@@ -57,11 +57,11 @@ export function MyCartProvider({ children }: { children: ReactNode }) {
 
   const addItemToCart = (product: SanityProduct) => {
     const existingItemIndex = cartItems.findIndex(
-      (p) => p._id === product._id && p.product_data?.size === product.product_data?.size
+      (p) => p._id === product._id && p.product_data?.weight === product.product_data?.weight
     );
 
     if (existingItemIndex !== -1) {
-      // Item with the same ID and size exists, update its quantity
+      // Item with the same ID and weight exists, update its quantity
       const updatedItems = cartItems.map((p, index) =>
         index === existingItemIndex
           ? { ...p, product_data: { ...p.product_data, quantity: p.product_data?.quantity! + product.product_data?.quantity! } }
@@ -82,10 +82,10 @@ export function MyCartProvider({ children }: { children: ReactNode }) {
     console.log('Before Removal:', cartItems);
 
     const updatedItems = cartItems.filter(
-      (p) => !(p._id === product._id && p.product_data?.size === product.product_data?.size)
+      (p) => !(p._id === product._id && p.product_data?.weight === product.product_data?.weight)
     );
 
-    console.log('Removing item:', product._id, product.product_data?.size);
+    console.log('Removing item:', product._id, product.product_data?.weight);
     console.log('Updated items:', updatedItems);
 
     sessionStorage.setItem('products', JSON.stringify(updatedItems));
@@ -98,9 +98,9 @@ export function MyCartProvider({ children }: { children: ReactNode }) {
   }
 
 
-  const updateQuantity = (productId: string, size: string, newQuantity: number) => {
+  const updateQuantity = (productId: string, weight: string, newQuantity: number) => {
     const updatedItems = cartItems.map((p) =>
-      p._id === productId && p.product_data?.size === size
+      p._id === productId && p.product_data?.weight === weight
         ? { ...p, product_data: { ...p.product_data, quantity: newQuantity } }
         : p
     );

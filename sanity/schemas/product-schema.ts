@@ -31,25 +31,14 @@ export const product = defineType({
       of: [{ type: "reference", to: [{ type: "categories" }] }],
     },
     {
-      name: "sizes",
+      name: "weights",
       title: "Weights",
-      type: "array",
-      of: [{ type: "string" }],
-    },
-    {
-      name: "colors",
-      title: "Colors",
       type: "array",
       of: [{ type: "string" }],
     },
     {
       name: "description",
       title: "Description",
-      type: "string",
-    },
-    {
-      name: "sku",
-      title: "Sku",
       type: "string",
     },
     {

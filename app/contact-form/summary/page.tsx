@@ -5,7 +5,7 @@ import Image from "next/image"
 import { urlForImage } from "@/sanity/lib/image"
 import { formatCurrencyString } from "use-shopping-cart"
 import { shimmer, toBase64 } from "@/lib/image"
-import { getSizeName } from "@/lib/utils"
+import { getWeightName } from "@/lib/utils"
 import { UseCart } from "@/components/cart-provider"
 import { CartSummary } from "@/components/cart-summary"
 
@@ -63,7 +63,7 @@ function Summary() {
                         <span className="text-gray-800 dark:text-gray-200">
                           الوزن:{" "}
                         </span>
-                        {getSizeName(product.product_data?.size || "")} ك
+                        {getWeightName(product.product_data?.weight || "")} ك
                       </p>
                     </div>
                   </div>

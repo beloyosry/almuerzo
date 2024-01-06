@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react"
 import { formatCurrencyString } from "use-shopping-cart"
 
 import { SanityProduct } from "@/config/inventory"
-import { getSizeName } from "@/lib/utils"
+import { getWeightName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { UseCart } from "./cart-provider"
@@ -18,34 +18,35 @@ interface Props {
 
 export function ProductInfo({ product }: Props) {
   const { addItemToCart, updateQuantity } = UseCart();
-  const [selectedSize, setSelectedSize] = useState(product.sizes[0])
+  const [selectedWeight, setSelectedWeight] = useState(product.weights[0])
   const { toast } = useToast()
 
   const weights = [1 / 4, 1 / 3, 1 / 2, 1]
   const weight: number | undefined = weights.find(
-    (w) => w === eval(selectedSize)
+    (w) => w === eval(selectedWeight)
   )
   const weightPrice = weight ? weight * product.price * 100 : 0
 
   const product_data = {
-    size: selectedSize as string,
+    weight: selectedWeight as string,
     price: weightPrice as number,
     quantity: 1 as number
   }
 
-  const isInCart = !!product_data?.size || !!product._id
+
 
   function addToCart() {
     const item = {
       ...product,
       product_data
     }
+    console.log("item", item);
 
-    // isInCart ? updateQuantity(item._id, item.product_data.quantity) : addItemToCart(item);
+
     addItemToCart(item)
 
     toast({
-      title: `${item.name} (${getSizeName(selectedSize)} كيلو)`,
+      title: `${item.name} (${getWeightName(selectedWeight)} كيلو)`,
       description: "تمت الاضافة للسلة",
       action: (
         <Link href="/cart">
@@ -81,16 +82,16 @@ export function ProductInfo({ product }: Props) {
 
       <div className="mt-4">
         <p>
-          الوزن (ك): <strong>{getSizeName(selectedSize)}</strong>
+          الوزن (ك): <strong>{getWeightName(selectedWeight)}</strong>
         </p>
-        {product.sizes.map((size) => (
+        {product.weights.map((weight) => (
           <Button
-            onClick={() => setSelectedSize(size)}
-            key={size}
-            variant={selectedSize === size ? "default" : "outline"}
+            onClick={() => setSelectedWeight(weight)}
+            key={weight}
+            variant={selectedWeight === weight ? "default" : "outline"}
             className="mr-2 mt-4"
           >
-            {getSizeName(size)}
+            {getWeightName(weight)}
           </Button>
         ))}
       </div>

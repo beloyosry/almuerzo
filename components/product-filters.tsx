@@ -28,29 +28,6 @@ const filters = [
       { value: "لحم", label: "لحم" },
     ],
   },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "xs", label: "X-Small" },
-      { value: "s", label: "Small" },
-      { value: "m", label: "Medium" },
-      { value: "l", label: "Large" },
-      { value: "xl", label: "X-Large" },
-      { value: "one-size", label: "One Size" },
-    ],
-  },
-  {
-    id: "color",
-    name: "Color",
-    options: [
-      { value: "black", label: "Black" },
-      { value: "blue", label: "Blue" },
-      { value: "brown", label: "Brown" },
-      { value: "green", label: "Green" },
-      { value: "yellow", label: "Yellow" },
-    ],
-  },
 ]
 
 export function ProductFilters() {
