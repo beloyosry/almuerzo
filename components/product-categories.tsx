@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { client } from "@/sanity/lib/client"
 import { urlForImage } from "@/sanity/lib/image"
 import { groq } from "next-sanity"
+
 import { Category } from "@/config/inventory"
 
 const ProductCategories = () => {
@@ -13,7 +14,6 @@ const ProductCategories = () => {
   const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
   const [checkedCategories, setCheckedCategories] = useState<string>("all")
-
 
   useEffect(() => {
     const getCategories = async () => {

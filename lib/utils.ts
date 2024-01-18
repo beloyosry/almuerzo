@@ -14,6 +14,7 @@ export function getWeightName(value: string) {
     case "1/3":
       return "1/3"
     case "1":
-      return "1"
+    case "0":
+      return "حسب الوزن"
   }
 }

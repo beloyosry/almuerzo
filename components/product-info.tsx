@@ -9,15 +9,15 @@ import { SanityProduct } from "@/config/inventory"
 import { getWeightName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import { UseCart } from "./cart-provider"
 
+import { UseCart } from "./cart-provider"
 
 interface Props {
   product: SanityProduct
 }
 
 export function ProductInfo({ product }: Props) {
-  const { addItemToCart, updateQuantity } = UseCart();
+  const { addItemToCart, updateQuantity } = UseCart()
   const [selectedWeight, setSelectedWeight] = useState(product.weights[0])
   const { toast } = useToast()
 
@@ -25,23 +25,22 @@ export function ProductInfo({ product }: Props) {
   const weight: number | undefined = weights.find(
     (w) => w === eval(selectedWeight)
   )
-  const weightPrice = weight ? weight * product.price * 100 : 0
+  const weightPrice = weight
+    ? weight * product.price * 100
+    : product.price * 100
 
   const product_data = {
     weight: selectedWeight as string,
     price: weightPrice as number,
-    quantity: 1 as number
+    quantity: 1 as number,
   }
-
-
 
   function addToCart() {
     const item = {
       ...product,
-      product_data
+      product_data,
     }
-    console.log("item", item);
-
+    console.log("item", item)
 
     addItemToCart(item)
 
@@ -58,8 +57,6 @@ export function ProductInfo({ product }: Props) {
       ),
     })
   }
-
-
 
   return (
     <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">

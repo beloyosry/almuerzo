@@ -1,25 +1,23 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { client } from "@/sanity/lib/client"
 import { groq } from "next-sanity"
+
 import { SanityProduct } from "@/config/inventory"
 import { siteConfig } from "@/config/site"
+import { FetchingError } from "@/lib/exceptions"
 import { cn } from "@/lib/utils"
 import ProductCategories from "@/components/product-categories"
 import { ProductGrid } from "@/components/product-grid"
 
-interface Props {
-  searchParams: {
-    category?: string
-    search?: string
-  }
-}
-
-export default function Page({ searchParams }: Props) {
+export default function Page() {
   const [products, setProducts] = useState<SanityProduct[]>([])
+  const [error, setError] = useState<any | unknown>(null)
 
-  const { category, search } = searchParams
+  const category = useSearchParams().get("category")
+  const search = useSearchParams().get("search")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,18 +44,21 @@ export default function Page({ searchParams }: Props) {
             description,
             "slug": slug.current
           }`
-        );
+        )
 
-        setProducts(result);
+        setProducts(result)
       } catch (error) {
-        console.error("Error fetching data:", error);
+        setError(error)
+        console.error("Error fetching data:", error)
       }
-    };
+    }
 
-    fetchData();
-  }, [category, search]);
+    fetchData()
+  }, [category, search])
 
-
+  if (error !== null) {
+    throw new FetchingError()
+  }
 
   return (
     <div>
@@ -77,7 +78,6 @@ export default function Page({ searchParams }: Props) {
             <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
               {products.length} منتجات
             </h1>
-
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6 ">
