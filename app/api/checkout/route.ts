@@ -13,7 +13,7 @@ const client = sanityClient({
 
 export async function POST(request: Request) {
   try {
-    const { items, user, orderDate, totalPrice } = await request.json();
+    const { items, user, orderDate, totalPrice, totalItems, status } = await request.json();
 
     // Create a new order document in Sanity
     const order = await client.create({
@@ -22,6 +22,8 @@ export async function POST(request: Request) {
       items: items as OrderItem[],
       user: user as User,
       totalPrice: totalPrice as string,
+      totalItems: totalItems as string,
+      status: status as string
     });
 
     // Do any other necessary processing here

@@ -33,7 +33,7 @@ export function ProductGrid({ products }: Props) {
         <Link
           key={product._id}
           href={`/products/${product.slug}`}
-          className="group text-sm"
+          className="group text-lg lg:text-sm"
         >
           <div className="aspect-h-1 aspect-w-1 h-full max-h-[80%] w-full overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-100 group-hover:opacity-75 dark:border-gray-800">
             <Image
@@ -49,7 +49,6 @@ export function ProductGrid({ products }: Props) {
             />
           </div>
           <h3 className="mt-4 font-medium">{product.name}</h3>
-         
         </Link>
       ))}
     </div>

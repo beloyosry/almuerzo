@@ -2,17 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "JF Flat Regular";
-  src: url(../public/fonts/JF-Flat-regular.eot);
-  src: url(../public/fonts/JF-Flat-regular.eot?#iefix)
-      format("embedded-opentype"),
-    url("../public/fonts/JF-Flat-regular.svg#JF Flat Regular") format("svg"),
-    url(../public/fonts/JF-Flat-regular.woff) format("woff"),
-    url(../public/fonts/JF-Flat-regular.ttf) format("truetype");
-  font-weight: bolder;
-  font-style: normal;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap');
 
 @layer base {
   :root {
@@ -86,9 +76,10 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "rlig"1, "calt"1;
   }
 }
 
@@ -98,8 +89,7 @@ button,
 a,
 input,
 p {
-  font-family: "JF Flat Regular", "Segoe UI", Tahoma, Geneva, Verdana,
-    sans-serif !important;
+  font-family: 'Cairo', sans-serif !important;
 }
 
 .sc-pVTma,
@@ -110,6 +100,7 @@ p {
 .kICdla {
   direction: ltr;
 }
+
 body {
   direction: rtl;
 }

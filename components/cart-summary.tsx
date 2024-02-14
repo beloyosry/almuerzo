@@ -30,7 +30,7 @@ export function CartSummary({ target, home, checkout = false }: Props) {
   const isDisabled = isLoading || cartCount! === 0
 
   const selectedLocation = sessionStorage.getItem("selectedLocation");
-  const isShipping = sessionStorage.getItem("isShipping");
+  const isShipping = sessionStorage.getItem("isShipping") || "false";
   const selectedLocationObject = locations?.find((location) => location.location === selectedLocation);
   const shippingValue = isShipping === "true" ? selectedLocationObject?.shippingPrice || 0 : 0
   const shippingAmount = cartCount! > 0 ? shippingValue : 0
@@ -50,11 +50,11 @@ export function CartSummary({ target, home, checkout = false }: Props) {
 
   const user = {
     name: sessionStorage.getItem("name") || "",
-    address: sessionStorage.getItem("address") || "",
+    address: sessionStorage.getItem("address") === "" ? "الإستلام من المنزل" : sessionStorage.getItem("address"),
     phone: sessionStorage.getItem("phoneNumber") || "",
-    shippingStatus: isShipping ? "توصيل" : "الإستلام من المنزل",
+    shippingStatus: isShipping === "true" ? "توصيل" : "الإستلام من المنزل",
     location: selectedLocationObject &&
-    selectedLocationObject.location || "لا يوجد توصيل",
+      selectedLocationObject.location || "الإستلام من المنزل",
     shippingPrice: selectedLocationObject?.shippingPrice || 0,
 
   }
@@ -96,13 +96,16 @@ export function CartSummary({ target, home, checkout = false }: Props) {
           orderDate: new Date().toISOString(),
           items: cartItems.map((item, index) => ({
             _key: item._id + index,
-            name: item.name,  // Assuming each cart item has a 'name' property
-            price: (Number(item.product_data?.price) / 100) * (Number(item.product_data?.quantity)) || 0,  // Adjust as per your data structure
+            name: item.name,
+            price: (Number(item.product_data?.price) / 100) * (Number(item.product_data?.quantity)) || 0,
             quantity: item.product_data?.quantity || 0,
             weight: String(item.product_data?.weight) || "",
-          })) as OrderItem[],
+            image: item.images
+          })) as unknown as OrderItem[],
           user: user as User,
           totalPrice: String(totalAmount / 100) + " EGP",
+          totalItems: String(cartCount),
+          status: "pending",
         };
 
         // Send the order data to the API route

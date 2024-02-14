@@ -20,11 +20,10 @@ function Summary() {
       setName(sessionStorage.getItem("name") || "")
       setAddress(sessionStorage.getItem("address") || "")
       setPhoneNumber(sessionStorage.getItem("phoneNumber") || "")
-
     }
   }, [])
 
-  if (!cartItems || !name || !address || !phonNumber) {
+  if (!cartItems || !name || !phonNumber) {
     return
   }
   return (
@@ -116,7 +115,7 @@ function Summary() {
                     عنوان الشحن
                   </p>
                   <p className="w-48 text-right text-sm leading-5 text-gray-600 dark:text-gray-400 md:text-right lg:w-full xl:w-48">
-                    {address}
+                    {address === "" ? "لا يوجد" : address}
                   </p>
                 </div>
                 <div className="flex flex-col items-center  justify-center space-y-4 md:items-start md:justify-start xl:mt-8">

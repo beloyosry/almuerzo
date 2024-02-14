@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Edit, ShoppingBag } from "lucide-react"
-import { useShoppingCart } from "use-shopping-cart"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

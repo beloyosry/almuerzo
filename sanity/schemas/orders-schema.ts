@@ -72,9 +72,22 @@ export const orders = defineType({
       readOnly: true,
     },
     {
+      name: "totalItems",
+      title: "Total Items",
+      type: "string",
+      readOnly: true,
+    },
+    {
       name: "totalPrice",
       title: "Total Price",
       type: "string",
+      readOnly: true,
+    },
+    {
+      name: "status",
+      title: "Status",
+      type: "string",
+      readOnly: true,
     },
   ],
   preview: {

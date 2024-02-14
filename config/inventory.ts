@@ -54,15 +54,18 @@ export interface OrderItem {
   readonly price: number
   readonly quantity: number
   readonly weight: string
+  readonly images: Image
 }
 
 export interface Order {
   readonly _id: string
   readonly _createdAt: string
   readonly _updatedAt: string
-  readonly items: readonly OrderItem[]
+  readonly items: OrderItem[]
   readonly user: User
-  readonly readOnly: boolean
+  readonly totalPrice: string
+  readonly totalItems: string
+  status: string
 }
 
 export interface Locations {

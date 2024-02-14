@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 
-const error = ({ error, reset }: { error: Error; reset: () => void }) => {
+const error = ({ error }: { error: Error }) => {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center space-x-8 space-y-16 lg:flex-row lg:space-y-0 2xl:space-x-0">
       <div className="flex w-full flex-col items-center justify-center text-center lg:w-1/2 lg:px-2 xl:px-0">
@@ -34,7 +34,7 @@ const error = ({ error, reset }: { error: Error; reset: () => void }) => {
           </svg>
           <span>Return Home</span>
         </Link>
-        <button onClick={reset}>Reset</button>
+        <button onClick={() => location.reload()}>Reset</button>
       </div>
       <div className="flex w-1/2 justify-center p-4 lg:h-full lg:items-end">
         <svg
